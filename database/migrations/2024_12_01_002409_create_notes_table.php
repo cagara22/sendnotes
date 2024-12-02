@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class)->onDelete('cascade');
             $table->string('title');
             $table->text('body');
+            $table->string('recipient');
             $table->date('send_date');
             $table->boolean('is_published')->default(false);
             $table->integer('heart_count')->default(0);
