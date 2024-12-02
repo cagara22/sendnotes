@@ -1,8 +1,16 @@
 <?php
 
 use Livewire\Volt\Component;
+use App\Models\Note;
 
 new class extends Component {
+    public function delete($noteId)
+    {
+        $note = Note::where('id', $noteId)->first();
+        $this->authorize('delete', $note);
+        $note->delete();
+    }
+
     public function with(): array
     {
         return [
@@ -21,13 +29,13 @@ new class extends Component {
             </div>
         @else
             <x-button primary right-icon="plus" class="my-6" href="{{route('notes.create')}}" wire:navigate>Create Note</x-button>
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-3 gap-4">
                 @foreach ($notes as $note)
                     <x-card wire:key='{{$note->id}}'>
                         <div class="flex justify-between">
                             <div>
-                                <a href="" class="text-xl font-bold hover:underline hover:text-blue-500">{{$note->title}}</a>
-                                <p>{{Str::limit($note->body, 100)}}</p>
+                                <a href="{{route('notes.edit', $note)}}" wire:navigate class="text-xl font-bold hover:underline hover:text-blue-500">{{$note->title}}</a>
+                                <p class="mt-2 text-xs">{{Str::limit($note->body, 30)}}</p>
                             </div>
                             <div class="text-xs text-gray-500">{{ \Carbon\Carbon::parse($note->send_date)->format('M-d-Y')}}</div>
                         </div>
@@ -35,7 +43,7 @@ new class extends Component {
                             <p class="text-xs">Recipient: <span class="font-semi-bold">{{$note->recipient}}</span></p>
                             <div>
                                 <x-mini-button rounded info icon="eye"></x-mini-button>
-                                <x-mini-button rounded negative icon="trash"></x-mini-button>
+                                <x-mini-button rounded negative icon="trash" wire:click="delete('{{$note->id}}')"></x-mini-button>
                             </div>
                         </div>
                     </x-card>
