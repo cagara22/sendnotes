@@ -10,7 +10,7 @@
             <div class="p-6 text-gray-900">
                 {{-- {{ __("you are in the Notes Page!") }} --}}
 
-                <livewire:notes.show-notes />
+                <livewire:notes.show-notes lazy />
             </div>
         </div>
     </div>
